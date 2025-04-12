@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tokenizer | GenAI</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-black px-[10vw] mx-auto mt-22">
+    <h1 class="text-white text-3xl font-bold">Tokenizer</h1>
+    <section class="mt-7 flex flex-col md:flex-row gap-6 justify-evenly">
+      <section class="min-w-[35vw] left">
+        <form id="tokenizerForm" class="flex flex-col gap-4">
+          <textarea
+            name="userInput"
+            id="userInput"
+            class="bg-white text-black p-2 rounded h-[30vh]"
+            placeholder="Enter text here"
+          ></textarea>
+        </form>
+      </section>
+
+      <section class="right min-w-[35vw]">
+        <div class="bg-white mb-7 py-4 pl-6" id="tokenCount">
+          <div class="text-[#ccc]">Token Count</div>
+          <div id="tokenCountValue">0</div> 
+        </div>
+        <div class="bg-white py-4 pl-6 min-h-[22vh]" id="tokens">
+          <!-- Tokens will appear here -->
+        </div>
+      </section>
+    </section>
+
+   <script src="main.js"></script>
+      
+  </body>
+</html>
