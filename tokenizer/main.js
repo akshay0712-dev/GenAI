@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .map((token, i) => {
           return `
             <span class="mb-2">
-              <span class="text-xs text-gray-400 ml-2 ">${asciiTokens[i]}</span>
+              <span class="text-sm font-semibold ml-2 ">${asciiTokens[i]}</span>
             </span>
           `;
         })
