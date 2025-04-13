@@ -69,7 +69,7 @@ const Piyush_sir_chat = () => {
       <div className="user_message flex items-center mt-4 w-[90vw] md:w-[60vw] mx-auto">
         <textarea
           className="flex-1 bg-neutral-800 text-white rounded-l-lg px-4 py-2 min-h-10 w-[70vw] md:w-[55vw] focus:outline-none "
-          placeholder="Type your message..."
+          placeholder="Ask Piyush Sir anything..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => {
