@@ -45,39 +45,40 @@ Output: {{ step: "result", content: "2 + 2 = 4 and that is calculated by adding 
 chat.send_message(system_prompt)
 
 # Get initial user query
-query = input("> ")
-chat.send_message(query)
 
-completed_steps = set()
 
 while True:
-    response = chat.send_message("continue")
-    raw = response.text.strip()
+    query = input("> ")
+    chat.send_message(query)
 
-    # Remove markdown code block if present
-    if raw.startswith("```json"):
-        raw = raw.replace("```json", "").replace("```", "").strip()
+    completed_steps = set()
+    while True:
+        response = chat.send_message("continue")
+        raw = response.text.strip()
 
-    try:
-        parsed_response = json.loads(raw)
-    except json.JSONDecodeError:
-        print("⚠️ Could not parse JSON. Full response:\n", response.text)
-        break
+        # Remove markdown code block if present
+        if raw.startswith("```json"):
+            raw = raw.replace("```json", "").replace("```", "").strip()
 
-    step = parsed_response.get("step")
-    content = parsed_response.get("content")
+        try:
+            parsed_response = json.loads(raw)
+        except json.JSONDecodeError:
+            print("⚠️ Could not parse JSON. Full response:\n", response.text)
+            break
 
-    if not step or not content:
-        print("⚠️ Missing 'step' or 'content' in response.")
-        break
+        step = parsed_response.get("step")
+        content = parsed_response.get("content")
 
-    completed_steps.add(step)
+        if not step or not content:
+            print("⚠️ Missing 'step' or 'content' in response.")
+            break
 
-   
+        completed_steps.add(step)
 
-    print(f"🧠 [{step}]: {content}")
+    
 
-    # Exit loop after reaching final step
-    if step == "result":
-        break
+        print(f"🧠 [{step}]: {content}")
 
+        # Exit loop after reaching final step
+        if step == "result":
+            break

@@ -26,12 +26,12 @@ Output: Bruh? You alright? Is it maths query?
 """
 
 response = client.models.generate_content(
-    model='gemini-2.0-flash-001', contents='What is 2 + 2 * 3 + 2 * 2?',
+    model='gemini-2.0-flash-001', 
     config=types.GenerateContentConfig(
         system_instruction= system_prompt,
         max_output_tokens=1000,
         temperature=0.1,
-
     ),
+    contents='What is the square root of 1441?',
 )
 print(response.text)

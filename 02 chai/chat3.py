@@ -37,21 +37,48 @@ Output: {{ step: "result", content: "2 + 2 = 4 and that is calculated by adding 
 
 """
 
+content = [
+    'what is 3 + 4 * 5',
+    json.dumps({
+        "step": "analyse",
+        "content": "The user is asking to evaluate the expression 3 + 4 * 5. This involves addition and multiplication."
+    }),
+    json.dumps({
+        "step": "think",
+        "content": "I need to remember the order of operations (PEMDAS/BODMAS). Multiplication comes before addition. So, I'll multiply 4 and 5 first, then add the result to 3."
+    }),
+    json.dumps({
+        "step": "output",
+        "content": "Following the order of operations, 4 * 5 = 20. Then, 3 + 20 = 23."
+    }),
+    json.dumps({
+        "step": "validate",
+        "content": "Let's re-check the calculation. 4 multiplied by 5 is indeed 20. Adding 3 to 20 gives 23. The order of operations was correctly applied."
+    }),
+]
+
+print(f'contents:    {content}') 
+
+# Add one more step to the list
+content.append(
+    json.dumps({
+        "step": "result",
+        "content": "3 + 4 * 5 = 23, calculated by first multiplying 4 and 5, and then adding 3 to the result."
+    })
+)
+
+print(f'updated contents:    {content}') 
+
 
 response = client.models.generate_content(
     model='gemini-2.0-flash-001', 
-    contents = types.Content(
-  role='user', parts=[types.Part.from_text(text='Why is the sky blue?')]
-    # role='user', parts=[types.Part.from_text(text= json.dumps({"step": "analyse","content": "The user is asking a question about a natural phenomenon, specifically the reason for the sky's blue color. This requires an explanation based on scientific principles."}))]
-    # role='user', parts=[types.Part.from_text(text= json.dumps({ "step": "think", "content": "The blue color of the sky is due to a phenomenon called Rayleigh scattering. I need to explain this concept in a clear and concise manner, avoiding overly technical jargon." }  ))]
-    # role='user', parts=[types.Part.from_text(text= json.dumps({"step": "analyse","content": "The user wants an explanation of Rayleigh scattering, which is responsible for the sky's blue color. The explanation should be easy to understand."} ))]
-    # role='user', parts=[types.Part.from_text(text= json.dumps({ "step": "think", "content": "Okay, I need to explain Rayleigh scattering in a simple way, focusing on why it makes the sky blue. I should avoid overly technical terms and use analogies if possible. Here's my plan: 1. Briefly define Rayleigh scattering. 2. Explain how sunlight interacts with air molecules. 3. Describe why blue light is scattered more than other colors. 4. Relate this scattering to the color we see in the sky. 5. Briefly mention why sunsets are reddish." } ))]
-    ),
+    contents = content,
     config=types.GenerateContentConfig(
         system_instruction= system_prompt,
         max_output_tokens=1000,
         temperature=0.1,
 
     ),
+   
 )
 print(response.text)
