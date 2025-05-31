@@ -41,6 +41,9 @@ while True:
     messages = []
 
     user_input = input("Enter your query: ")
+    if user_input.lower().strip() == "exit":
+        print("Exiting the program.")
+        break
     messages.append(user_input)
 
     while True: 
