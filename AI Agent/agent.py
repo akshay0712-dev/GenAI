@@ -109,6 +109,57 @@ def generate_uuid(text : str):
     return f"Generated UUID: {str(uuid.uuid4())}"
 
 
+# Tool to get latest news
+def get_latest_news(query: str = None):
+    print(f"📰 Fetching news for query: {query if query else 'Top Headlines'}")
+    
+    news_api_key = os.getenv("NEWS_API_KEY")
+    if not news_api_key:
+        return "Error: NEWS_API_KEY not found in environment variables. Please set it to use this feature."
+
+    base_url = "https://newsapi.org/v2/top-headlines"
+    params = {
+        "country": "us"
+    }
+    if query:
+        params["q"] = query
+
+    headers = {'X-Api-Key': news_api_key} 
+    
+    try:
+        response = requests.get(base_url, headers=headers, params=params)
+        if response.status_code == 200:
+            data = response.json()
+            articles = data.get("articles", [])
+            if not articles:
+                return "No news found for your query."
+            
+            formatted_news = []
+            for article in articles[:5]: # Get top 3-5 articles
+                title = article.get('title', 'No Title')
+                description = article.get('description', '')
+                url = article.get('url', '')
+                news_item = f"Title: {title}"
+                if description:
+                    news_item += f"\n  Description: {description}"
+                news_item += f"\n  URL: {url}"
+                formatted_news.append(news_item)
+            return "\n\n".join(formatted_news)
+        else:
+            # It's good to include the response text for more detailed error diagnosis
+            error_detail = response.text
+            try:
+                # Attempt to parse JSON error from NewsAPI for better readability
+                json_error = response.json()
+                if 'message' in json_error:
+                    error_detail = json_error['message']
+            except json.JSONDecodeError:
+                pass # Stick with response.text if not JSON
+            return f"Failed to fetch news. Status code: {response.status_code} - {error_detail}"
+    except requests.exceptions.RequestException as e:
+        return f"Failed to fetch news. Error: {e}"
+    
+
 available_tools = {
     "get_weather": {
         "fn": get_weather,
@@ -145,6 +196,10 @@ available_tools = {
     "generate_uuid": {
         "fn": generate_uuid, 
         "description": "Generates a UUID."
+    },
+    "get_latest_news": {
+        "fn": get_latest_news,
+        "description": "Fetches the latest news headlines. Optionally takes a query to search for specific news topics."
     }
 }
 
