@@ -261,14 +261,23 @@ Do not return a JSON block inside the 'content' string. The 'content' should onl
 """
 
 # Start conversation
-print("Welcome to the AI Agent! Type 'exit' to quit.")
+print("Welcome to the AI Agent! Type 'exit' to quit.") 
+history = []
 while True:
     
     user_query = input("Enter your query >  ")
     if user_query.lower().strip() == "exit" or user_query.lower().strip() == "quit":
         print("Exiting the program.")
         break
-    messages = [f"User Query: {user_query}"]
+    # Build conversation history string
+    history_string = "\n".join([
+        f"User: {entry['query']}\nAssistant: {entry['response']}" for entry in history
+    ])
+
+    # Include history and the new user query
+    messages = [f"{history_string}\nUser: {user_query}"]
+
+    
 
     finished = False
     while not finished:
@@ -313,7 +322,12 @@ while True:
 
 
             if step == "output":
-                print(f"\n✅ Final Answer: {parsed_response.get('content')}")
+                assistant_response = parsed_response.get("content")
+                print(f"\n✅ Final Answer: {assistant_response}")
+                history.append({
+                    "query": user_query,
+                    "response": assistant_response
+                })
                 finished = True
                 break
         if step == "output":
@@ -321,3 +335,7 @@ while True:
 
 
       
+# print(f"\nConversation History: {json.dumps(history, indent=2)}")
+print("\n Conversation History:")
+for entry in history:
+    print(f"User: {entry['query']}\nAssistant: {entry['response']}\n")
