@@ -222,6 +222,9 @@ tool_descriptions = "\n".join(
     [f"- {name}: {info['description']}" for name, info in available_tools.items()]
 )
 print (f"Available Tools:\n{tool_descriptions}")
+
+
+
 # System prompt
 system_prompt = f"""
 You are a helpful AI Assistant who is specialized in resolving user queries.
