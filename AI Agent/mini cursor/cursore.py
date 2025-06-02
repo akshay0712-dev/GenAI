@@ -20,6 +20,7 @@ client = OpenAI(
 # Returns the current working directory
 def get_current_directory():
     try:
+        print("Tool called: get_current_directory")
         return os.getcwd()
     except Exception as E:
         return f"Error: {str(E)}"
@@ -27,6 +28,7 @@ def get_current_directory():
 # Changes the current working directory to the specified path
 def change_directory(path):
     try:
+        print(f"Tool called: change_directory with path: {path}")
         os.chdir(path)
         return f"Changed directory to {os.getcwd()}"
     except Exception as E:
@@ -35,6 +37,7 @@ def change_directory(path):
 # Lists all files and folders in the given path (defaults to current directory)
 def list_directory(path="."):
     try:
+        print(f"Tool called: list_directory with path: {path}")
         return os.listdir(path)
     except Exception as E:
         return f"Error: {str(E)}"
@@ -42,6 +45,7 @@ def list_directory(path="."):
 # Creates a single directory
 def create_directory(directory_name):
     try:
+        print(f"Tool called: create_directory with name: {directory_name}")
         os.mkdir(directory_name)
         return f"{directory_name} created successfully"
     except Exception as E:
@@ -50,6 +54,7 @@ def create_directory(directory_name):
 # Creates nested directories (intermediate folders as needed)
 def create_nested_directories(path):
     try:
+        print(f"Tool called: create_nested_directories with path: {path}")
         os.makedirs(path)
         return f"{path} created successfully"
     except Exception as E:
@@ -58,6 +63,7 @@ def create_nested_directories(path):
 # Removes a directory (only if it is empty)
 def remove_empty_directory(path):
     try:
+        print(f"Tool called: remove_empty_directory with path: {path}")
         os.rmdir(path)
         return f"{path} removed successfully"
     except Exception as E:
@@ -66,6 +72,7 @@ def remove_empty_directory(path):
 # Removes a directory and its empty parent directories
 def remove_nested_directories(path):
     try:
+        print(f"Tool called: remove_nested_directories with path: {path}")
         os.removedirs(path)
         return f"{path} and its empty parents removed successfully"
     except Exception as E:
@@ -74,6 +81,7 @@ def remove_nested_directories(path):
 # Creates an empty file
 def create_file(filename, content=""):
     try:
+        print(f"Tool called: create_file with filename: {filename}")
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(content)
         return f"File '{filename}' created successfully with content."
@@ -83,14 +91,17 @@ def create_file(filename, content=""):
 # Removes/deletes a file
 def remove_file(filename):
     try:
+        print(f"Tool called: remove_file with filename: {filename}")
         os.remove(filename)
         return f"File '{filename}' removed successfully"
     except Exception as E:
         return f"Error: {str(E)}"
 
 # Renames a file or directory from old name to new name
+
 def rename(old_name, new_name):
     try:
+        print(f"Tool called: rename from '{old_name}' to '{new_name}'")
         os.rename(old_name, new_name)
         return f"Renamed '{old_name}' to '{new_name}' successfully"
     except Exception as E:
@@ -99,6 +110,7 @@ def rename(old_name, new_name):
 # Returns metadata/statistics about a file or directory
 def get_file_stats(path):
     try:
+        print(f"Tool called: get_file_stats with path: {path}")
         stats = os.stat(path)
         return stats
     except Exception as E:
@@ -107,6 +119,7 @@ def get_file_stats(path):
 # Checks if a path exists (file or directory)
 def path_exists(path):
     try:
+        print(f"Tool called: path_exists with path: {path}")
         return os.path.exists(path)
     except Exception as E:
         return f"Error: {str(E)}"
@@ -114,6 +127,7 @@ def path_exists(path):
 # Checks if the path is a file
 def is_file(path):
     try:
+        print(f"Tool called: is_file with path: {path}")
         return os.path.isfile(path)
     except Exception as E:
         return f"Error: {str(E)}"
@@ -121,6 +135,7 @@ def is_file(path):
 # Checks if the path is a directory
 def is_directory(path):
     try:
+        print(f"Tool called: is_directory with path: {path}")
         return os.path.isdir(path)
     except Exception as E:
         return f"Error: {str(E)}"
@@ -128,6 +143,7 @@ def is_directory(path):
 # Copies a file from source to destination
 def copy_file(src, dst):
     try:
+        print(f"Tool called: copy_file from '{src}' to '{dst}'")
         shutil.copy(src, dst)
         return f"File copied from '{src}' to '{dst}' successfully"
     except Exception as E:
@@ -136,6 +152,7 @@ def copy_file(src, dst):
 # Recursively copies an entire directory from source to destination
 def copy_directory(src, dst):
     try:
+        print(f"Tool called: copy_directory from '{src}' to '{dst}'")
         shutil.copytree(src, dst)
         return f"Directory copied from '{src}' to '{dst}' successfully"
     except Exception as E:
@@ -144,6 +161,7 @@ def copy_directory(src, dst):
 # Moves a file or directory from source to destination
 def move(src, dst):
     try:
+        print(f"Tool called: move from '{src}' to '{dst}'")
         shutil.move(src, dst)
         return f"Moved '{src}' to '{dst}' successfully"
     except Exception as E:
@@ -152,6 +170,7 @@ def move(src, dst):
 # Deletes a directory and all its contents (files and subfolders)
 def remove_directory_tree(path):
     try:
+        print(f"Tool called: remove_directory_tree with path: {path}")
         shutil.rmtree(path)
         return f"Directory tree '{path}' deleted successfully"
     except Exception as E:
@@ -160,6 +179,7 @@ def remove_directory_tree(path):
 # Runs any system command like 'ls', 'mkdir', 'clear', etc.
 def run_system_command(command):
     try:
+        print(f"Tool called: run_system_command with command: '{command}'")
         exit_code = os.system(command)
         return f"Command '{command}' executed with exit code {exit_code}"
     except Exception as E:
@@ -168,6 +188,7 @@ def run_system_command(command):
 # Clears the terminal (Linux/macOS)
 def clear_terminal_unix():
     try:
+        print("Tool called: clear_terminal_unix")
         os.system("clear")
         return "Terminal cleared (Unix/Linux/macOS)"
     except Exception as E:
@@ -176,6 +197,7 @@ def clear_terminal_unix():
 # Clears the terminal (Windows)
 def clear_terminal_windows():
     try:
+        print("Tool called: clear_terminal_windows")
         os.system("cls")
         return "Terminal cleared (Windows)"
     except Exception as E:
@@ -184,6 +206,7 @@ def clear_terminal_windows():
 # Returns absolute path of the given path
 def get_absolute_path(path):
     try:
+        print(f"Tool called: get_absolute_path with path: {path}")
         return os.path.abspath(path)
     except Exception as E:
         return f"Error: {str(E)}"
@@ -191,6 +214,7 @@ def get_absolute_path(path):
 # Splits a path into (head, tail)
 def split_path(path):
     try:
+        print(f"Tool called: split_path with path: {path}")
         return os.path.split(path)
     except Exception as E:
         return f"Error: {str(E)}"
@@ -198,10 +222,10 @@ def split_path(path):
 # Joins multiple path parts into one
 def join_paths(*paths):
     try:
+        print(f"Tool called: join_paths with paths: {paths}")
         return os.path.join(*paths)
     except Exception as E:
         return f"Error: {str(E)}"
-
 
 
 
@@ -356,7 +380,7 @@ print("Welcome to Cursore AI Assistant (type 'exit' to quit or 'clear' to clear 
 
 while True: 
     user_input = input("Enter your query >> : ")
-    messages.append({"role": "user", "content": user_input})
+    
     
     if user_input.strip().lower() == "exit":
         print("Exiting Cursore AI Assistant. Goodbye!")
@@ -365,6 +389,12 @@ while True:
         os.system('cls' if os.name == 'nt' else 'clear')
         print("Terminal cleared.")
         continue
+    elif user_input.strip().lower() == "help":
+        print(f"Available commands:\n - exit: Quit the assistant\n - clear: Clear the terminal\n - help: Show this help message\n\n")
+        user_input = "list all available tools"
+
+        
+    messages.append({"role": "user", "content": user_input})
     print("Generating response...", os.getcwd())
     while True:
         response = ai.chat.completions.create(
