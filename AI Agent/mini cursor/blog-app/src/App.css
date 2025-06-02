@@ -1,0 +1,106 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.container {
+  width: 80%;
+  margin: auto;
+  overflow: hidden;
+}
+
+h1 {
+  background: #576CBC;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+}
+
+nav {
+  background: #DFE8CC;
+  color: #333;
+  padding: 10px;
+}
+
+nav ul {
+  padding: 0;
+  list-style: none;
+}
+
+nav li {
+  display: inline;
+  padding: 0 20px 0 0;
+}
+
+nav a {
+  color: #333;
+  text-decoration: none;
+}
+
+.posts {
+  margin-top: 20px;
+}
+
+.posts ul {
+  padding: 0;
+  list-style: none;
+}
+
+.posts li {
+  margin-bottom: 10px;
+}
+
+.posts .card {
+  background: #fff;
+  border: #ccc 1px solid;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.posts a {
+  color: #333;
+  text-decoration: none;
+}
+
+.post-detail {
+  background: #fff;
+  border: #ccc 1px solid;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.post-detail .date {
+  font-style: italic;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+form {
+  padding: 20px;
+  background: #fff;
+  border: #ccc 1px solid;
+}
+
+form input[type="text"], form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: #ccc 1px solid;
+}
+
+form button {
+  background: #576CBC;
+  color: #fff;
+  border: 0;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+form button:hover {
+  background: #364564;
+}
