@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+Restart/
+
 # Distribution / packaging
 .Python
 build/
