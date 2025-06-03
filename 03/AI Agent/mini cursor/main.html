@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akshay Kumar's Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            --bg-body: #f9fafb;
+            --text-body: #374151;
+            --bg-primary: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-on-gradient: #f9fafb;
+            --text-footer: #d1d5db;
+            --footer-bg: #111827;
+            --color-primary: #4f46e5;
+            --color-primary-hover: #4338ca;
+            --bg-hover: #eef2ff;
+            --hero-gradient-from: #4f46e5;
+            --hero-gradient-to: #7c3aed;
+            --hero-highlight: #facc15;
+            --bg-alternate-section: #f3f4f6;
+            --card-bg: #ffffff;
+            --about-border: #c7d2fe;
+            --border-color: #e5e7eb;
+            --shadow-color: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
+            --shadow-hover-color: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+
+            --skill-tag-bg-blue: #dbeafe; --skill-tag-text-blue: #1e40af;
+            --skill-tag-bg-yellow: #fef9c3; --skill-tag-text-yellow: #854d0e;
+            --skill-tag-bg-green: #d1fae5; --skill-tag-text-green: #065f46;
+            --skill-tag-bg-red: #fee2e2; --skill-tag-text-red: #991b1b;
+            --skill-tag-bg-teal: #ccfbf1; --skill-tag-text-teal: #0f766e;
+            --skill-tag-bg-gray: #e5e7eb; --skill-tag-text-gray: #1f2937;
+            --skill-tag-bg-purple: #f3e8ff; --skill-tag-text-purple: #6b21a8;
+            --skill-tag-bg-indigo: #e0e7ff; --skill-tag-text-indigo: #3730a3;
+            --skill-tag-bg-orange: #ffedd5; --skill-tag-text-orange: #9a3412;
+            --skill-tag-bg-pink: #fce7f3; --skill-tag-text-pink: #9d174d;
+        }
+        body.dark-mode {
+            --bg-body: #111827;
+            --text-body: #d1d5db;
+            --bg-primary: #1f2937;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --text-on-gradient: #f9fafb;
+            --text-footer: #d1d5db;
+            --footer-bg: #111827;
+            --color-primary: #818cf8;
+            --color-primary-hover: #a78bfa;
+            --bg-hover: #374151;
+            --hero-gradient-from: #312e81;
+            --hero-gradient-to: #581c87;
+            --hero-highlight: #facc15;
+            --bg-alternate-section: #1a202c;
+            --card-bg: #1f2937;
+            --about-border: #4f46e5;
+            --border-color: #374151;
+            --shadow-color: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+            --shadow-hover-color: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+
+            --skill-tag-bg-blue: #1e3a8a; --skill-tag-text-blue: #bfdbfe;
+            --skill-tag-bg-yellow: #ca8a04; --skill-tag-text-yellow: #fef9c3;
+            --skill-tag-bg-green: #15803d; --skill-tag-text-green: #d1fae5;
+            --skill-tag-bg-red: #b91c1c; --skill-tag-text-red: #fee2e2;
+            --skill-tag-bg-teal: #134e4a; --skill-tag-text-teal: #ccfbf1;
+            --skill-tag-bg-gray: #4b5563; --skill-tag-text-gray: #e5e7eb;
+            --skill-tag-bg-purple: #581c87; --skill-tag-text-purple: #f3e8ff;
+            --skill-tag-bg-indigo: #3730a3; --skill-tag-text-indigo: #e0e7ff;
+            --skill-tag-bg-orange: #c2410c; --skill-tag-text-orange: #ffedd5;
+            --skill-tag-bg-pink: #86198f; --skill-tag-text-pink: #fce7f3;
+        }
+        body { background-color: var(--bg-body); color: var(--text-body); transition: background-color 0.3s ease, color 0.3s ease; }
+        html { scroll-padding-top: 5rem; }
+        nav { background-color: var(--bg-primary); box-shadow: var(--shadow-color); transition: background-color 0.3s ease, box-shadow 0.3s ease; }
+        .nav-link { color: var(--text-secondary); }
+        .nav-link:hover { color: var(--color-primary); }
+        .hero-section-alt {
+            background: linear-gradient(135deg, var(--hero-gradient-from), var(--hero-gradient-to));
+            color: var(--text-on-gradient);
+            position: relative;
+            overflow: hidden; /* Ensure pattern doesn't overflow */
+        }
+        .hero-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(var(--text-on-gradient) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1; /* Subtle pattern */
+            z-index: 0;
+        }
+        .section-title { color: var(--text-primary); position: relative; display: inline-block; padding-bottom: 0.5rem; }
+        .section-title::after { content: ''; position: absolute; left: 0; bottom: 0; width: 70%; height: 3px; background-color: var(--color-primary); border-radius: 9999px; }
+        .reveal-section { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .reveal-section.is-visible { opacity: 1; transform: translateY(0); }
+        .hamburger-icon span { background-color: var(--text-body); transition: all 0.3s ease-in-out; }
+        #mobile-menu-button.is-active .hamburger-icon span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        #mobile-menu-button.is-active .hamburger-icon span:nth-child(2) { opacity: 0; }
+        #mobile-menu-button.is-active .hamburger-icon span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 1.5rem; }
+
+        #skills { background-color: var(--bg-alternate-section); }
+        #skills h3 { color: var(--color-primary); }
+        .skill-tag { display: inline-block; padding: 0.5rem 1rem; border-radius: 9999px; font-weight: 500; cursor: default; margin: 0.25rem; transition: all 0.3s ease-in-out; box-shadow: var(--shadow-color); }
+        .skill-tag:hover { transform: translateY(-3px) scale(1.05); box-shadow: var(--shadow-hover-color); }
+
+        #projects { background-color: var(--bg-primary); }
+        .project-card { background-color: var(--card-bg); border: 1px solid var(--border-color); box-shadow: var(--shadow-color); transition: all 0.3s ease-in-out; }
+        .project-card:hover { box-shadow: var(--shadow-hover-color); transform: translateY(-4px); }
+        .project-card h3 { color: var(--color-primary); }
+        .project-card p { color: var(--text-secondary); }
+        .project-card .tech-tag { background-color: var(--bg-hover); color: var(--color-primary); }
+        .project-card a { color: var(--color-primary); }
+        .project-card a:hover { color: var(--color-primary-hover); }
+        
+        #contact { background-color: var(--bg-alternate-section); }
+        #contact p { color: var(--text-secondary); }
+        .contact-card { background-color: var(--bg-primary); border: 1px solid var(--border-color); box-shadow: var(--shadow-color); transition: all 0.3s ease-in-out; }
+        .contact-card:hover { box-shadow: var(--shadow-hover-color); transform: translateY(-4px); }
+        .contact-card span.label { color: var(--text-body); transition: color 0.3s ease-in-out; }
+        .contact-card:hover span.label { color: var(--color-primary); }
+        
+        footer { background-color: var(--footer-bg); color: var(--text-footer); }
+        footer a { color: var(--text-footer); transition: color 0.3s ease-in-out; }
+        footer a:hover { color: var(--color-primary); }
+
+        /* Keyframe animations for the new design */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseBorder {
+            0%, 100% { border-color: var(--color-primary); }
+            50% { border-color: var(--hero-highlight); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }
+        .animate-pulseBorder { animation: pulseBorder 2s infinite alternate; }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="fixed w-full z-20 top-0">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div class="flex items-center justify-between h-20">
+                <a href="#home" class="text-2xl font-bold transition-transform hover:scale-105" style="color: var(--color-primary);">Akshay Kumar</a>
+                <div class="hidden md:flex items-center space-x-2">
+                    <a href="#about" class="nav-link text-lg font-medium rounded-md px-3 py-2 hover:bg-[var(--bg-hover)] transition-colors">About</a>
+                    <a href="#skills" class="nav-link text-lg font-medium rounded-md px-3 py-2 hover:bg-[var(--bg-hover)] transition-colors">Skills</a>
+                    <a href="#projects" class="nav-link text-lg font-medium rounded-md px-3 py-2 hover:bg-[var(--bg-hover)] transition-colors">Projects</a>
+                    <a href="#contact" class="nav-link text-lg font-medium rounded-md px-3 py-2 hover:bg-[var(--bg-hover)] transition-colors">Contact</a>
+                    <button id="theme-toggle" class="ml-4 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--bg-primary)] focus:ring-[var(--color-primary)] text-2xl" aria-label="Toggle theme">
+                        <span id="theme-icon" class="transition-transform duration-300 inline-block">☀️</span>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-[var(--text-body)] hover:bg-[var(--bg-hover)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--color-primary)]" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <div class="hamburger-icon space-y-2">
+                            <span class="block w-6 h-0.5"></span>
+                            <span class="block w-6 h-0.5"></span>
+                            <span class="block w-4 h-0.5"></span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden" style="background-color: var(--bg-primary); border-top: 1px solid var(--border-color);">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#about" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium" style="color: var(--text-secondary);">About</a>
+                <a href="#skills" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium" style="color: var(--text-secondary);">Skills</a>
+                <a href="#projects" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium" style="color: var(--text-secondary);">Projects</a>
+                <a href="#contact" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium" style="color: var(--text-secondary);">Contact</a>
+                <button id="mobile-theme-toggle" class="w-full text-left flex items-center gap-3 px-3 py-2 rounded-md text-base font-medium" style="color: var(--text-secondary);" aria-label="Toggle theme">
+                    <span id="mobile-theme-icon" class="text-xl">☀️</span>
+                    <span>Toggle Theme</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-20">
+        <section id="home" class="hero-section-alt min-h-[calc(100vh-5rem)] flex items-center justify-center p-4">
+            <div class="hero-pattern"></div>
+            <div class="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center text-center py-12 md:py-24 max-w-7xl">
+                <div class="max-w-[90vw] md:max-w-[800px] w-full space-y-6">
+                    <div class="text-2xl md:text-3xl font-medium animate-fadeIn" style="color: var(--text-on-gradient); animation-delay: 0.2s;">
+                        <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&duration=3500&pause=1000&center=true&vCenter=true&random=false&width=120&lines=Hello!+%F0%9F%91%8B;नमस्ते&color=f9fafb&weight=500" alt="Hello" class="h-auto min-h-[50px] mx-auto">
+                    </div>
+                    <div class="text-5xl md:text-7xl font-extrabold animate-fadeIn" style="color: var(--text-on-gradient); animation-delay: 0.4s;">
+                        I'm <span style="color: var(--hero-highlight);">Akshay Kumar</span>
+                    </div>
+                    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&duration=3500&pause=1000&center=true&vCenter=true&random=false&width=550&lines=Self-taught+Front-End+Developer%2C;Aspiring+Software+Developer%2C;Computer+Science+Student%2C;Tech+Enthusiast%2C;Active+Learner%2FResearcher%2C;Love+to+learn+new+stuffs..&color=f9fafb" alt="Web Developer" class="h-auto min-h-[50px] mx-auto animate-fadeIn" style="animation-delay: 0.6s;">
+                    <p class="text-lg md:text-xl selection:bg-neutral-800 selection:text-white selection:px-3 selection:py-6 max-w-2xl mx-auto animate-fadeIn" style="color: var(--text-on-gradient); animation-delay: 0.8s;">
+                        I’m a passionate BTech student with a strong interest in web development. I love building sleek, functional websites and applications, constantly expanding my skill set with new technologies.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-7 mt-8 animate-fadeIn" style="animation-delay: 1s;">
+                        <a href="#projects">
+                            <div class="px-8 py-4 w-fit font-bold text-lg lg:text-xl rounded-full shadow-xl transform transition duration-300 hover:scale-105 hover:shadow-2xl animate-float" 
+                                style="background-color: var(--hero-highlight); color: var(--text-primary); border: 2px solid var(--hero-highlight); cursor: pointer;">
+                                My Projects
+                            </div>
+                        </a>
+                        <div class="flex items-center gap-7">
+                            <a href="https://github.com/akshay0712-dev" class="text-[var(--text-on-gradient)] hover:text-[var(--color-primary)] transition-colors duration-300" aria-label="GitHub">
+                                <svg fill="currentColor" viewBox="0 0 24 24" class="w-9 h-9" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path></svg>
+                            </a>
+                            <a href="https://www.linkedin.com/in/akshay-kumar-a7b29a246/" class="text-[var(--text-on-gradient)] hover:text-[#0077B5] transition-colors duration-300 flex items-center" aria-label="LinkedIn">
+                                <svg fill="currentColor" viewBox="0 0 16 16" class="w-9 h-9" aria-hidden="true"><path d="M14.5455 0H1.45455C0.650909 0 0 0.650909 0 1.45455V14.5455C0 15.3491 0.650909 16 1.45455 16H14.5455C15.3491 16 16 15.3491 16 14.5455V1.45455C16 0.650909 15.3491 0 14.5455 0ZM5.05746 13.0909H2.912V6.18764H5.05746V13.0909ZM3.96291 5.20073C3.27127 5.20073 2.712 4.64 2.712 3.94982C2.712 3.25964 3.272 2.69964 3.96291 2.69964C4.65236 2.69964 5.21309 3.26036 5.21309 3.94982C5.21309 4.64 4.65236 5.20073 3.96291 5.20073ZM13.0938 13.0909H10.9498V9.73382C10.9498 8.93309 10.9353 7.90327 9.83491 7.90327C8.71855 7.90327 8.54691 8.77527 8.54691 9.67564V13.0909H6.40291V6.18764H8.46109V7.13091H8.49018C8.77673 6.58836 9.47636 6.016 10.52 6.016C12.6924 6.016 13.0938 7.44582 13.0938 9.30473V13.0909V13.0909Z" fill="currentColor"></path></svg>
+                            </a>
+                            <a href="https://www.instagram.com/akshay__rishu/" class="text-[var(--text-on-gradient)] hover:text-red-500 transition-colors duration-300" aria-label="Instagram">
+                                <svg fill="currentColor" viewBox="0 0 24 24" class="w-9 h-9" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.748.137-.353-.3.882-.344-1.857-.047-1.023-.058-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-16 md:py-24 reveal-section">
+             <div class="container mx-auto px-6 lg:px-8 max-w-7xl">
+                <h2 class="section-title text-3xl md:text-4xl font-bold mb-8 text-center">About Me</h2>
+               
+                <div class="flex flex-col md:flex-row items-center gap-12 max-w-5xl mx-auto">
+                    <div class="md:w-1/3 flex-shrink-0">
+                        <img src="https://lh3.googleusercontent.com/d/1NfOpZ2QVqgD8MGW5PwcnniAymQfs132N" alt="A portrait of Akshay Kumar" class="rounded-full shadow-lg border-4 mx-auto w-56 h-56 md:w-64 md:h-64 object-cover" style="border-color: var(--about-border);">
+                    </div>
+                    <div class="md:w-2/3 text-lg leading-relaxed text-justify space-y-4">
+                        <p>Hi, I’m <b style="color: var(--text-primary);">Akshay</b>! I’m an aspiring <b style="color: var(--text-primary);">Full Stack Developer</b> with a passion for building efficient, scalable, and user-centric applications. Currently pursuing my B.Tech, I’m diving deep into backend development with <b style="color: var(--text-primary);">Node.js</b> and improving my problem-solving skills through <b style="color: var(--text-primary);">Data Structures and Algorithms (DSA)</b>.</p>
+                        <p>My journey is driven by a curiosity for what's next in technology. I believe that being a well-rounded developer means not only mastering code but also understanding the technological landscape it operates in.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="py-16 md:py-24 reveal-section">
+            <div class="container mx-auto px-6 lg:px-8 max-w-7xl">
+                <h2 class="section-title text-3xl md:text-4xl font-bold mb-8 ">Core Competencies</h2>
+                
+                <div class="space-y-12 mx-auto">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 " style="color: var(--color-primary);">Languages</h3>
+                        <div class="flex flex-wrap  items-center gap-3 pl-7">
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-blue); color: var(--skill-tag-text-blue);">C++</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-yellow); color: var(--skill-tag-text-yellow);">JavaScript</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-green); color: var(--skill-tag-text-green);">Python</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 " style="color: var(--color-primary);">Frontend Development</h3>
+                        <div class="flex flex-wrap  items-center gap-3 pl-7">
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-red); color: var(--skill-tag-text-red);">HTML5</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-blue); color: var(--skill-tag-text-blue);">CSS3</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-yellow); color: var(--skill-tag-text-yellow);">React</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-teal); color: var(--skill-tag-text-teal);">Tailwind CSS</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 " style="color: var(--color-primary);">Backend Development</h3>
+                        <div class="flex flex-wrap  items-center gap-3 pl-7">
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-gray); color: var(--skill-tag-text-gray);">Node.js</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-gray); color: var(--skill-tag-text-gray);">Express.js</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-green); color: var(--skill-tag-text-green);">MongoDB</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 " style="color: var(--color-primary);">AI & Machine Learning</h3>
+                        <div class="flex flex-wrap  items-center gap-3 pl-7">
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-purple); color: var(--skill-tag-text-purple);">Generative AI (GenAI)</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-purple); color: var(--skill-tag-text-purple);">Google Gemini API</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-purple); color: var(--skill-tag-text-purple);">AI Assistant Development</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-purple); color: var(--skill-tag-text-purple);">Prompt Engineering</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-purple); color: var(--skill-tag-text-purple);">Natural Language Processing (NLP)</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-purple); color: var(--skill-tag-text-purple);">Deep Learning Concepts</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 " style="color: var(--color-primary);">DevOps & Cloud</h3>
+                        <div class="flex flex-wrap  items-center gap-3 pl-7">
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-indigo); color: var(--skill-tag-text-indigo);">Docker</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-indigo); color: var(--skill-tag-text-indigo);">Containerization</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-indigo); color: var(--skill-tag-text-indigo);">Docker Hub</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-indigo); color: var(--skill-tag-text-indigo);">Docker Compose</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-indigo); color: var(--skill-tag-text-indigo);">Container Orchestration</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-indigo); color: var(--skill-tag-text-indigo);">DevOps Principles</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-indigo); color: var(--skill-tag-text-indigo);">Cloudinary (Cloud Storage)</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 " style="color: var(--color-primary);">Tools & Practices</h3>
+                        <div class="flex flex-wrap  items-center gap-3 pl-7">
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-orange); color: var(--skill-tag-text-orange);">Git</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-gray); color: var(--skill-tag-text-gray);">GitHub</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-blue); color: var(--skill-tag-text-blue);">VS Code</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-red); color: var(--skill-tag-text-red);">NPM</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-orange); color: var(--skill-tag-text-orange);">Postman (API Testing)</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-green); color: var(--skill-tag-text-green);">JWT Authentication</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-yellow); color: var(--skill-tag-text-yellow);">API Integration</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-purple); color: var(--skill-tag-text-purple);">Problem Solving</span>
+                            <span class="skill-tag" style="background-color: var(--skill-tag-bg-red); color: var(--skill-tag-text-red);">Collaborative Development</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="py-16 md:py-24 reveal-section">
+            <div class="container mx-auto px-6 lg:px-8 max-w-7xl">
+                <h2 class="section-title text-3xl md:text-4xl font-bold mb-8 text-center">Project Showcase</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="project-card rounded-lg overflow-hidden flex flex-col">
+                        <img src="https://media.licdn.com/dms/image/v2/D5622AQFlUDbpC3Fwyg/feedshare-shrink_800/B56ZU.3uYgGoAs-/0/1740516551362?e=1751500800&v=beta&t=csnjLgRn1uP8jUnMbJQjv3hI4sjord0f5OJNUz646es" alt="Biometric Data Management System Project Thumbnail" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/334155?text=Biometric+Data+Management';">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-semibold mb-2">Biometric Data Management System</h3>
+                            <p class="mb-4 text-sm flex-grow text-justify">A project that fetches biometric data from an Excel file and displays it on a website. This journey really helped me level up my backend skills. Key features include user registration & login, view attendance details, admin dashboard to view & manage all users' attendance, and Excel upload for admin to update biometric data, syncing with MongoDB.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">MongoDB</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Postman</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Cloudinary</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">JWT Authentication</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Refresh & Access Tokens</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Node.js</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Express.js</span>
+                            </div>
+                            <div class="flex justify-end gap-4 mt-auto">
+                                <a href="https://github.com/akshay0712-dev/Biometric-" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-[var(--color-primary-hover)] transition-colors">GitHub →</a>
+                                <a href="#" class="font-medium text-gray-400 cursor-not-allowed">Live Demo (N/A)</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card rounded-lg overflow-hidden flex flex-col">
+                        <img src="https://akshay0712-dev.github.io/portfolio/pic1.png" alt="CampusDocs Project Thumbnail" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/334155?text=CampusDocs';">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-semibold mb-2">CampusDocs</h3>
+                            <p class="mb-4 text-sm flex-grow text-justify">This web application is designed to simplify access to essential documents, the syllabus, and college WhatsApp groups for students. With CampusDocs, you can effortlessly find and download important forms, join relevant WhatsApp groups, view the syllabus, and stay updated on academic events—all in one convenient platform!</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">HTML</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">CSS</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">JavaScript</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">React</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Tailwind CSS</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Node.js</span>
+                            </div>
+                            <div class="flex justify-end gap-4 mt-auto">
+                                <a href="https://github.com/akshay0712-dev/CampusDocs-final" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-[var(--color-primary-hover)] transition-colors">GitHub →</a>
+                                <a href="https://campus-docs.vercel.app/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-[var(--color-primary-hover)] transition-colors">Live Demo →</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card rounded-lg overflow-hidden flex flex-col">
+                        <img src="https://akshay0712-dev.github.io/portfolio/pic2.png" alt="Blog Website Project Thumbnail" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/334155?text=Blog+Website';">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-semibold mb-2">Blog Website</h3>
+                            <p class="mb-4 text-sm flex-grow text-justify">Here users can explore posts and filter them by category, enhancing my skills in routing and dynamic content rendering. Key features include category filtering, individual post pages, and a fully responsive design.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">HTML</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">CSS</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">JavaScript</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">React</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">React Router</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Tailwind CSS</span>
+                            </div>
+                            <div class="flex justify-end gap-4 mt-auto">
+                                <a href="https://github.com/akshay0712-dev/project" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-[var(--color-primary-hover)] transition-colors">GitHub →</a>
+                                <a href="https://akshay0712-dev.github.io/project" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-[var(--color-primary-hover)] transition-colors">Live Demo →</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card rounded-lg overflow-hidden flex flex-col">
+                        <img src="https://akshay0712-dev.github.io/portfolio/pic3.png" alt="Weather App Project Thumbnail" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/334155?text=Weather+App';">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-semibold mb-2">Weather App</h3>
+                            <p class="mb-4 text-sm flex-grow text-justify">A dynamic web application that provides real-time weather information based on user input. Utilizing APIs, this app displays current weather conditions, forecasts, and more, making it easy to plan your day.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">React</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Tailwind CSS</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Weather API</span>
+                            </div>
+                            <div class="flex justify-end gap-4 mt-auto">
+                                <a href="https://github.com/akshay0712-dev/project" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-[var(--color-primary-hover)] transition-colors">GitHub →</a>
+                                <a href="https://akshay0712-dev.github.io/project" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-[var(--color-primary-hover)] transition-colors">Live Demo →</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card rounded-lg overflow-hidden flex flex-col">
+                        <img src="https://media.licdn.com/dms/image/v2/D5622AQFlUDbpC3Fwyg/feedshare-shrink_800/B56ZU.3uYgGoAs-/0/1740516551362?e=1751500800&v=beta&t=csnjLgRn1uP8jUnMbJQjv3hI4sjord0f5OJNUz646es" alt="Expense Tracker Project Thumbnail" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/334155?text=Expense+Tracker';">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-semibold mb-2">Expense Tracker</h3>
+                            <p class="mb-4 text-sm flex-grow text-justify">An intuitive React-based application that helps users track their incomes and expenses efficiently. With features for adding, editing, and deleting transactions, users can visualize their spending habits and maintain financial health.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">React</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Tailwind CSS</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Weather API</span>
+                            </div>
+                            <div class="flex justify-end gap-4 mt-auto">
+                                <a href="https://github.com/akshay0712-dev/expense-tracker-react-app" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-[var(--color-primary-hover)] transition-colors">GitHub →</a>
+                                <a href="https://expense-tracker-react-app-swart.vercel.app/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-[var(--color-primary-hover)] transition-colors">Live Demo →</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card rounded-lg overflow-hidden flex flex-col">
+                        <img src="https://akshay0712-dev.github.io/portfolio/pic5.png" alt="ToDo App Project Thumbnail" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/334155?text=ToDo+App';">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-semibold mb-2">ToDo App</h3>
+                            <p class="mb-4 text-sm flex-grow text-justify">A task management application that allows users to organize and categorize their tasks effectively. Users can add, edit, and delete tasks while keeping them organized by categories suchs as work, personal, or study.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">React</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Local Storage</span>
+                                <span class="tech-tag text-xs font-medium px-2.5 py-0.5 rounded-full">Tailwind CSS</span>
+                            </div>
+                            <div class="flex justify-end gap-4 mt-auto">
+                                <a href="https://github.com/akshay0712-dev/MERN-ToDo-App" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-[var(--color-primary-hover)] transition-colors">GitHub →</a>
+                                <a href="#" class="font-medium text-gray-400 cursor-not-allowed">Live Demo</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-16 md:py-24 reveal-section">
+            <div class="container mx-auto px-6 lg:px-8 max-w-7xl">
+                <h2 class="section-title text-3xl md:text-4xl font-bold mb-8 text-center">Get In Touch</h2>
+                <p class="max-w-3xl mx-auto text-center mb-12 text-lg">I'm always open to discussing new projects, creative ideas, or opportunities. Whether you have a question or just want to say hi, feel free to reach out!</p>
+                <div class="max-w-lg mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6 text-center">
+                    <a href="mailto:akshaykumar812003@gmail.com" class="contact-card p-4 rounded-lg flex items-center justify-center gap-4">
+                        <svg class="w-10 h-10 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884L10 9.882l-7.997 3.998V5.884zM22 5.884v6.003L14.003 9.882 22 5.884zM.003 16.116L12 10.118l11.997 5.998V7.882L12 1.884.003 7.882v8.234z"></path></svg>
+                        <span class="label font-medium">Email</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/akshay-kumar-a7b29a246/" target="_blank" rel="noopener noreferrer" class="contact-card p-4 rounded-lg flex items-center justify-center gap-4">
+                        <svg class="w-10 h-10 transition-colors duration-300" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M14.5455 0H1.45455C0.650909 0 0 0.650909 0 1.45455V14.5455C0 15.3491 0.650909 16 1.45455 16H14.5455C15.3491 16 16 15.3491 16 14.5455V1.45455C16 0.650909 15.3491 0 14.5455 0ZM5.05746 13.0909H2.912V6.18764H5.05746V13.0909ZM3.96291 5.20073C3.27127 5.20073 2.712 4.64 2.712 3.94982C2.712 3.25964 3.272 2.69964 3.96291 2.69964C4.65236 2.69964 5.21309 3.26036 5.21309 3.94982C5.21309 4.64 4.65236 5.20073 3.96291 5.20073ZM13.0938 13.0909H10.9498V9.73382C10.9498 8.93309 10.9353 7.90327 9.83491 7.90327C8.71855 7.90327 8.54691 8.77527 8.54691 9.67564V13.0909H6.40291V6.18764H8.46109V7.13091H8.49018C8.77673 6.58836 9.47636 6.016 10.52 6.016C12.6924 6.016 13.0938 7.44582 13.0938 9.30473V13.0909V13.0909Z"></path>
+                        </svg>
+                        <span class="label font-medium">LinkedIn</span>
+                    </a>
+                    <a href="https://github.com/akshay0712-dev" target="_blank" rel="noopener noreferrer" class="contact-card p-4 rounded-lg flex items-center justify-center gap-4">
+                        <svg class="w-10 h-10 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+                        </svg>
+                        <span class="label font-medium">GitHub</span>
+                    </a>
+                    <a href="https://www.instagram.com/akshay__rishu/" target="_blank" rel="noopener noreferrer" class="contact-card p-4 rounded-lg flex items-center justify-center gap-4">
+                        <svg class="w-10 h-10 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.748.137-.353-.3.882-.344-1.857-.047-1.023-.058-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd"></path></svg>
+                        <span class="label font-medium">Instagram</span>
+                    </a>
+                     <a href="https://drive.google.com/file/d/1Bs6PvhSAr-OHBSXilwVu7Y56sUTCfhgp/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="contact-card p-4 rounded-lg flex items-center justify-center gap-4">
+                        <svg class="w-10 h-10 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M12 17v-6"/><path d="M9 14h6"/>
+                        </svg>
+                        <span class="label font-medium">Resume</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-8">
+        <div class="container mx-auto px-6 lg:px-8 text-center text-sm max-w-7xl">
+            <p>© 2024 Akshay Kumar. All Rights Reserved.</p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <a href="https://www.linkedin.com/in/akshay-kumar-a7b29a246/" class="transition duration-300" aria-label="LinkedIn" style="color: var(--text-footer);">
+                    <svg class="w-6 h-6 hover:text-[var(--color-primary)] transition-colors duration-300" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M14.5455 0H1.45455C0.650909 0 0 0.650909 0 1.45455V14.5455C0 15.3491 0.650909 16 1.45455 16H14.5455C15.3491 16 16 15.3491 16 14.5455V1.45455C16 0.650909 15.3491 0 14.5455 0ZM5.05746 13.0909H2.912V6.18764H5.05746V13.0909ZM3.96291 5.20073C3.27127 5.20073 2.712 4.64 2.712 3.94982C2.712 3.25964 3.272 2.69964 3.96291 2.69964C4.65236 2.69964 5.21309 3.26036 5.21309 3.94982C5.21309 4.64 4.65236 5.20073 3.96291 5.20073ZM13.0938 13.0909H10.9498V9.73382C10.9498 8.93309 10.9353 7.90327 9.83491 7.90327C8.71855 7.90327 8.54691 8.77527 8.54691 9.67564V13.0909H6.40291V6.18764H8.46109V7.13091H8.49018C8.77673 6.58836 9.47636 6.016 10.52 6.016C12.6924 6.016 13.0938 7.44582 13.0938 9.30473V13.0909V13.0909Z"></path>
+                    </svg>
+                </a>
+                <a href="https://github.com/akshay0712-dev" class="transition duration-300" aria-label="GitHub" style="color: var(--text-footer);">
+                    <svg class="w-6 h-6 hover:text-[var(--color-primary)] transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+                    </svg>
+                </a>
+                <a href="https://www.instagram.com/akshay__rishu/" class="transition duration-300" aria-label="Instagram" style="color: var(--text-footer);">
+                    <svg class="w-6 h-6 hover:text-[var(--color-primary)] transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.748.137-.353-.3.882-.344-1.857-.047-1.023-.058-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd"></path></svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggleButton = document.getElementById('theme-toggle');
+            const mobileThemeToggleButton = document.getElementById('mobile-theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const mobileThemeIcon = document.getElementById('mobile-theme-icon');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link, #mobile-theme-toggle');
+
+            const applyTheme = (theme) => {
+                const iconRotation = theme === 'dark' ? 'rotate(180deg)' : 'rotate(0deg)';
+                if (theme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                    themeIcon.textContent = '🌙';
+                    mobileThemeIcon.textContent = '�';
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    themeIcon.textContent = '☀️';
+                    mobileThemeIcon.textContent = '☀️';
+                }
+                themeIcon.style.transform = iconRotation;
+                // Update readme-typing-svg colors based on theme
+                const typingSvgs = document.querySelectorAll('.hero-section-alt img[src*="readme-typing-svg"]');
+                typingSvgs.forEach(svg => {
+                    // Always set color to f9fafb (white) for both themes
+                    const newColor = 'f9fafb';
+                    const currentSrc = svg.src;
+                    const updatedSrc = currentSrc.replace(/color=[^&]*/, `color=${newColor}`);
+                    svg.src = updatedSrc;
+                });
+            };
+
+            const toggleTheme = () => {
+                const currentTheme = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
+                localStorage.setItem('theme', currentTheme);
+                applyTheme(currentTheme);
+            };
+
+            themeToggleButton.addEventListener('click', toggleTheme);
+            mobileThemeToggleButton.addEventListener('click', toggleTheme);
+            
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                applyTheme('dark');
+            } else {
+                applyTheme('light');
+            }
+
+            mobileMenuButton.addEventListener('click', () => {
+                const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+                mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+                mobileMenuButton.classList.toggle('is-active');
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuButton.setAttribute('aria-expanded', 'false');
+                    mobileMenuButton.classList.remove('is-active');
+                });
+            });
+
+            const sections = document.querySelectorAll('.reveal-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => { observer.observe(section); });
+
+            const nav = document.querySelector('nav');
+            window.addEventListener('scroll', () => {
+                nav.style.boxShadow = window.scrollY > 10 ? 'var(--shadow-hover-color)' : 'var(--shadow-color)';
+            });
+        });
+    </script>
+</body>
+</html>
