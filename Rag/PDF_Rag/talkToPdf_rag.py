@@ -11,7 +11,7 @@ from google.genai import types
 
 
 load_dotenv()
-os.getenv("API_KEY")
+API_KEY = os.getenv("API_KEY")
 
 client = genai.Client(api_key = API_KEY)
 
@@ -38,7 +38,7 @@ client = genai.Client(api_key = API_KEY)
 # print(split_docs[117])
 
 
-os.environ["GOOGLE_API_KEY"] = "AIzaSyAlfDTITrcCgGw2enIjvSDZA8aKZ71bHWY"
+os.environ["GOOGLE_API_KEY"] = API_KEY
 
 embeddings = GoogleGenerativeAIEmbeddings(
   model="models/embedding-001",
