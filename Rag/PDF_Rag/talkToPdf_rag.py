@@ -10,11 +10,10 @@ from google import genai
 from google.genai import types
 
 
+load_dotenv()
+os.getenv("API_KEY")
 
-load_dotenv() 
-api_key = os.getenv("API_KEY")
-# Only run this block for Gemini Developer API
-client = genai.Client(api_key = api_key)
+client = genai.Client(api_key = API_KEY)
 
 
 # pdf_path = Path(__file__).parent  / "nodejs.pdf"
