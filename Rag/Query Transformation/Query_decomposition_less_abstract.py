@@ -8,6 +8,11 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings  # For Google Ge
 from langchain_qdrant import QdrantVectorStore  # Vector store interface for Qdrant
 from google import genai  # Google's generative AI client
 from google.genai import types  # Types for model configuration
+import ast 
+from concurrent.futures import ThreadPoolExecutor
+import threading
+import time
+
 
 # Define terminal style helpers
 class Style:
@@ -21,6 +26,7 @@ class Style:
     CYAN = '\033[96m'
     MAGENTA = '\033[95m'
     GRAY = '\033[90m'
+
 
 # Loads API key from environment variable
 def load_api_key():
@@ -99,11 +105,11 @@ Context:
 {context_text}
 
 Instructions:
-- Your top priority is to use the information in the context to answer the question.
-- You may use general knowledge **only to clarify or elaborate**, but you may not introduce facts not present in the context as core parts of the answer.
-- If the context does not provide enough information to answer the question meaningfully, respond with:
-"Context is insufficient."
-
+- Use the context above to answer the question as accurately and descriptively as possible.
+- Do not use any outside knowledge or assumptions beyond what is given in the context.
+- Add a summery of your answer at the last
+- If the context does not provide enough information to answer the question, respond with:
+"I don't know as the context is insufficient."
 
 Guidelines:
 - Format your answer for terminal display using ANSI escape codes:
@@ -111,17 +117,20 @@ Guidelines:
     - Use bold or underline for headings.
     - Use proper indentation and spacing for readability.
 
+
+Precaution: 
+- before giving the answer rechake if answer is complete and propery forated and used Used bright colors to highlight keywords and examples using ANSI escape codes
 """
 
 # Sends the prompt and user question to the GenAI model and returns the response
 def answer_question(client, prompt, question):
-    print("answer_question is called")
+    # print("answer_question is called")
     response = client.models.generate_content(
         model='gemini-2.0-flash-001',
         config=types.GenerateContentConfig(
             system_instruction=prompt,
             max_output_tokens=1000,
-            temperature=0.5,  # Low temperature for more deterministic results
+            temperature=0.1,  # Low temperature for more deterministic results
         ),
         contents=question,
     )
@@ -129,52 +138,88 @@ def answer_question(client, prompt, question):
 
 def context_texts(question, client, retriever):
     system_prompt = f"""
-You are an intelligent and helpful assistant. Your task is to take a user's question and generate a Hypothetical Document on the topic related to question given by user
-
+You are an intelligent and helpful assistant. Your task is to take a user's question and generate three to five distinct, relevant decomosed search queries or break the user query into three to five small queries that capture different possible interpretations or aspects of the original query.
 
 Guidelines:
-- Analyze the question and give a documented answer of the user query
-- Write a detailed document of 500–600 words with multiple examples and explanations.
+- Break the user query into small meaning full sub queries 
 
+Strict Guideline:
+- Before giving result rechake the output formate
 
 User Question: {question}
 
 Format:
-Return a text document as valid python string like "your solution"
+Return the three queries as a valid Python-style list of strings, like: ["query1", "query2", "query3", .....]
 
 Example:
-If the user question is: "How does Node.js handle file operations?"
+If the user question is: "What is machine learning?"
 You might respond with:
-"Node.js handles file operations using the built-in fs (File System) module. It provides both synchronous and asynchronous methods to interact with the file system—such.............."
+["What is machine ?", "What is learning?", "What is machine learning",.......]
 
-
-respond a valid python string
+Only generate the list of three to five sub queries.
 """
 
     # Ask model to create alternate queries
-    hypothetical_query = answer_question(client, system_prompt, question)
+    multi_query = answer_question(client, system_prompt, question)
+    if multi_query.startswith("```"):
+        multi_query = multi_query.strip("`")  # remove backticks
+        # Optionally remove leading language label (like "python")
+        if multi_query.lower().startswith("python"):
+            multi_query = multi_query[len("python"):].strip()
+    try:
+        parsed_queries = ast.literal_eval(multi_query.strip())
+        if not isinstance(parsed_queries, list) or not all(isinstance(q, str) for q in parsed_queries):
+            raise ValueError("Parsed result is not a valid list of strings.")
+
+    except (SyntaxError, ValueError):
+        print("❌ Could not parse the generated queries.")
+        print(f"Raw output: {multi_query}")
+        return ""
+    
+    for query in parsed_queries:
+        print(f"Sub Quries -> {query}")
 
     seen = set()
-    unique_chunks = []
+    answer_query = []
 
-    search_results = retriever.similarity_search( query = hypothetical_query)
-    added = 0
-    for chunk in search_results:
-        if chunk.page_content not in seen:
-            seen.add(chunk.page_content)
-            unique_chunks.append(chunk)
-            added += 1
-    print(f"✅ Added {added} chunks ")
+    def process_query(query):
+        unique_chunks = []
+        print(f"🔍 Sub Query -> {query}")
+        search_results = retriever.similarity_search(query=query)
+        added = 0
+        for chunk in search_results:
+            if chunk.page_content not in seen:
+                seen.add(chunk.page_content)
+                unique_chunks.append(chunk)
+                added += 1
+        # print(f"✅ Added {added} chunks from '{query}'")
+        context_text = "\n\n".join(chunk.page_content for chunk in unique_chunks) 
+        for query in answer_query:
+            context_text = context_text + "\n\n" + query + "\n"
+        system_prompt_answer = generate_prompt(context_text)  # Generate prompt using context chunks
+        # print(f"System prompt :{system_prompt_answer}")
+        response = answer_question(client, system_prompt_answer, query)
+        if response.startswith("```") and "```" in response[3:]:
+        # Remove code block markers
+            response = response.strip("`").strip("text").strip()
+        
+        # Interpret ANSI codes
+        interpreted_response = response.encode().decode("unicode_escape")
+        
+        print(interpreted_response)
+        answer_query.append(interpreted_response)
+
+    
 
 
-   
+    for query in parsed_queries:
+        process_query(query)
 
-    context_text = "\n\n".join(chunk.page_content for chunk in unique_chunks)
+    context_text = "\n\n".join(answers for answers in answer_query) 
 
-    # print(f"Hypothetical query: {hypothetical_query}")
+
     return context_text
-
-
+    # return ""
 def print_colored_answer(answer):
     print(f"\n{Style.BOLD}{Style.CYAN}📘 Answer:{Style.RESET}\n")
 
@@ -187,6 +232,8 @@ def print_colored_answer(answer):
     interpreted_answer = answer.encode().decode("unicode_escape")
     
     print(interpreted_answer + Style.RESET)
+
+
 
 # Main execution flow
 def main():
@@ -217,8 +264,9 @@ def main():
     system_prompt_answer = generate_prompt(context_text)  # Generate prompt using context chunks
     # print(f"System prompt :{system_prompt_answer}")
     response = answer_question(client, system_prompt_answer, question)  # Get AI-generated answer
-
-    print_colored_answer(response)  # Output the answer to the console
+    print("Final Answer")
+    # print(response)
+    print_colored_answer(response)   # Output the answer to the console
 
 # Entry point for the script
 if __name__ == "__main__":

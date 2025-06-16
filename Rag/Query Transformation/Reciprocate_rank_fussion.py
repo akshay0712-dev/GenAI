@@ -8,6 +8,12 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings  # For Google Ge
 from langchain_qdrant import QdrantVectorStore  # Vector store interface for Qdrant
 from google import genai  # Google's generative AI client
 from google.genai import types  # Types for model configuration
+import ast 
+from concurrent.futures import ThreadPoolExecutor
+import threading
+import time
+from collections import defaultdict
+
 
 # Define terminal style helpers
 class Style:
@@ -21,6 +27,7 @@ class Style:
     CYAN = '\033[96m'
     MAGENTA = '\033[95m'
     GRAY = '\033[90m'
+
 
 # Loads API key from environment variable
 def load_api_key():
@@ -99,10 +106,11 @@ Context:
 {context_text}
 
 Instructions:
-- Your top priority is to use the information in the context to answer the question.
-- You may use general knowledge **only to clarify or elaborate**, but you may not introduce facts not present in the context as core parts of the answer.
-- If the context does not provide enough information to answer the question meaningfully, respond with:
-"Context is insufficient."
+- Use the context above to answer the question as accurately and descriptively as possible.
+- Do not use any outside knowledge or assumptions beyond what is given in the context.
+- Add a summery of your answer at the last
+- If the context does not provide enough information to answer the question, respond with:
+"I don't know as the context is insufficient."
 
 
 Guidelines:
@@ -111,6 +119,8 @@ Guidelines:
     - Use bold or underline for headings.
     - Use proper indentation and spacing for readability.
 
+Precaution: 
+- before giving the answer rechake if answer is complete and propery forated and used Used bright colors to highlight keywords and examples using ANSI escape codes
 """
 
 # Sends the prompt and user question to the GenAI model and returns the response
@@ -121,7 +131,7 @@ def answer_question(client, prompt, question):
         config=types.GenerateContentConfig(
             system_instruction=prompt,
             max_output_tokens=1000,
-            temperature=0.5,  # Low temperature for more deterministic results
+            temperature=0.1,  # Low temperature for more deterministic results
         ),
         contents=question,
     )
@@ -129,49 +139,83 @@ def answer_question(client, prompt, question):
 
 def context_texts(question, client, retriever):
     system_prompt = f"""
-You are an intelligent and helpful assistant. Your task is to take a user's question and generate a Hypothetical Document on the topic related to question given by user
-
+You are an intelligent and helpful assistant. Your task is to take a user's question and generate thirty distinct, relevant search queries that capture different possible interpretations or aspects of the original query.
 
 Guidelines:
-- Analyze the question and give a documented answer of the user query
-- Write a detailed document of 500–600 words with multiple examples and explanations.
+- Rephrase the original query to cover slightly different angles or subtopics.
+- Avoid repeating the exact same wording.
+- Ensure all generated queries remain closely tied to the user's original intent.
+- Do not include the original query in the output.
 
+Strict Guideline:
+- Before giving result rechake the output formate
 
 User Question: {question}
 
 Format:
-Return a text document as valid python string like "your solution"
-
+Return the thirty queries as a valid Python-style list of strings, like: ["query1", "query2", "query3", .....]
 Example:
 If the user question is: "How does Node.js handle file operations?"
 You might respond with:
-"Node.js handles file operations using the built-in fs (File System) module. It provides both synchronous and asynchronous methods to interact with the file system—such.............."
+["What is the role of the fs module in Node.js?", "How to read and write files using Node.js?", "Node.js methods for file manipulation",.......]
 
-
-respond a valid python string
+Only generate the list of thirty queries.
 """
 
     # Ask model to create alternate queries
-    hypothetical_query = answer_question(client, system_prompt, question)
+    multi_query = answer_question(client, system_prompt, question)
+    if multi_query.startswith("```"):
+        multi_query = multi_query.strip("`")  # remove backticks
+        # Optionally remove leading language label (like "python")
+        if multi_query.lower().startswith("python"):
+            multi_query = multi_query[len("python"):].strip()
+    try:
+        parsed_queries = ast.literal_eval(multi_query.strip())
+        if not isinstance(parsed_queries, list) or not all(isinstance(q, str) for q in parsed_queries):
+            raise ValueError("Parsed result is not a valid list of strings.")
 
-    seen = set()
-    unique_chunks = []
+    except (SyntaxError, ValueError):
+        print("❌ Could not parse the generated queries.")
+        print(f"Raw output: {multi_query}")
+        return ""
+    
+    k = 60  # constant in RRF formula
+    score_dict = defaultdict(float)  # id -> cumulative RRF score
+    chunk_map = {}  # id -> chunk (only store highest scoring version)
+    lock = threading.Lock()
 
-    search_results = retriever.similarity_search( query = hypothetical_query)
-    added = 0
-    for chunk in search_results:
-        if chunk.page_content not in seen:
-            seen.add(chunk.page_content)
-            unique_chunks.append(chunk)
-            added += 1
-    print(f"✅ Added {added} chunks ")
+    def process_query(query):
+        print(f"🔍 Query -> {query}")
+        search_results = retriever.similarity_search(query=query)
 
+        with lock:
+            for rank, chunk in enumerate(search_results):
+                chunk_id = chunk.metadata.get('_id')
+                if not chunk_id:
+                    continue
+                score = 1 / (k + rank + 1)  # RRF score
+                score_dict[chunk_id] += score
+                if chunk_id not in chunk_map:
+                    chunk_map[chunk_id] = chunk
+        print(f"✅ Processed {len(search_results)} chunks from '{query}'")
 
-   
+    start_time = time.time()
+    with ThreadPoolExecutor() as executor:
+        executor.map(process_query, parsed_queries)
+    end_time = time.time()
 
-    context_text = "\n\n".join(chunk.page_content for chunk in unique_chunks)
+    print(f"\n⏱️ Parallel similarity search took: {end_time - start_time:.2f} seconds")
+    print(f"📦 Total unique chunks scored: {len(score_dict)}")
 
-    # print(f"Hypothetical query: {hypothetical_query}")
+    # Sort chunks by RRF score
+    ranked_chunk_ids = sorted(score_dict, key=score_dict.get, reverse=True)
+    ranked_chunks = [chunk_map[chunk_id] for chunk_id in ranked_chunk_ids]
+
+    for i, chunk in enumerate(ranked_chunks):
+        print(f"{i+1:02d}. Score: {score_dict[chunk.metadata['_id']]:.4f} | ID: {chunk.metadata['_id']}")
+
+    # Combine content for return
+    context_text = "\n\n".join(chunk.page_content for chunk in ranked_chunks)
     return context_text
 
 
@@ -188,29 +232,32 @@ def print_colored_answer(answer):
     
     print(interpreted_answer + Style.RESET)
 
+def load_docs(embeddings):
+    # Optional: Uncomment the lines below to load and ingest a PDF
+    docs = load_pdf("syllabus.pdf")
+    split_docs = split_documents(docs)
+    vector_store = initialize_vector_store(embeddings, documents=split_docs)
+    ingest_documents(vector_store, split_docs)
+
+
+
 # Main execution flow
 def main():
     print("main is called")
     api_key = load_api_key()  # Load API key from environment
     client = initialize_genai_client(api_key)  # Initialize GenAI client
     
-    # Optional: Uncomment the lines below to load and ingest a PDF
-    # docs = load_pdf("syllabus.pdf")
-    # split_docs = split_documents(docs)
     
     embeddings = setup_embeddings(api_key)  # Set up embeddings model
 
-    # Optional: Uncomment the lines below to initialize and populate the vector store
-    # vector_store = initialize_vector_store(embeddings, documents=split_docs)
-    # ingest_documents(vector_store, split_docs)
 
     retriever = get_retriever(embeddings)  # Load retriever from existing Qdrant collection
+    # load_docs(embeddings)
 
     question = input("Enter your question: ")  # Prompt user for a question
 
 
     context_text = context_texts(question, client, retriever) # 
-    
 
 
 
@@ -218,7 +265,7 @@ def main():
     # print(f"System prompt :{system_prompt_answer}")
     response = answer_question(client, system_prompt_answer, question)  # Get AI-generated answer
 
-    print_colored_answer(response)  # Output the answer to the console
+    print_colored_answer(response)   # Output the answer to the console
 
 # Entry point for the script
 if __name__ == "__main__":
