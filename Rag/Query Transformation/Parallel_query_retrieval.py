@@ -206,6 +206,7 @@ Only generate the list of thirty queries.
 
     context_text = "\n\n".join(chunk.page_content for chunk in unique_chunks)
     return context_text
+
 def print_colored_answer(answer):
     print(f"\n{Style.BOLD}{Style.CYAN}📘 Answer:{Style.RESET}\n")
 

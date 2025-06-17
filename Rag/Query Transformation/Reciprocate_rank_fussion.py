@@ -14,6 +14,7 @@ import threading
 import time
 from collections import defaultdict
 
+data_collection_name = "node js"
 
 # Define terminal style helpers
 class Style:
@@ -69,12 +70,12 @@ def setup_embeddings(api_key):
     )
 
 # Initializes a Qdrant vector store with the documents and embeddings
-def initialize_vector_store(embeddings, collection_name="learning_langchain", documents=None):
+def initialize_vector_store(embeddings, data_collection_name, documents=None):
     print("initialize_vector_store is called")
     vector_store = QdrantVectorStore.from_documents(
         documents=documents or [],  # Defaults to empty list if no documents
         url="http://localhost:6333",  # Local Qdrant instance
-        collection_name=collection_name,
+        collection_name=data_collection_name,
         embedding=embeddings
     )
     return vector_store
@@ -86,11 +87,11 @@ def ingest_documents(vector_store, split_docs):
     print("Ingestion done.")
 
 # Retrieves the vector store for querying based on existing embeddings
-def get_retriever(embeddings, collection_name="learning_langchain"):
+def get_retriever(embeddings, data_collection_name):
     print("get_retriever is called")
     return QdrantVectorStore.from_existing_collection(
         url="http://localhost:6333",
-        collection_name=collection_name,
+        collection_name=data_collection_name,
         embedding=embeddings
     )
 
@@ -236,7 +237,7 @@ def load_docs(embeddings):
     # Optional: Uncomment the lines below to load and ingest a PDF
     docs = load_pdf("syllabus.pdf")
     split_docs = split_documents(docs)
-    vector_store = initialize_vector_store(embeddings, documents=split_docs)
+    vector_store = initialize_vector_store(embeddings,data_collection_name , documents=split_docs)
     ingest_documents(vector_store, split_docs)
 
 
@@ -250,19 +251,18 @@ def main():
     
     embeddings = setup_embeddings(api_key)  # Set up embeddings model
 
-
-    retriever = get_retriever(embeddings)  # Load retriever from existing Qdrant collection
-    # load_docs(embeddings)
+    load_docs(embeddings)
+    retriever = get_retriever(embeddings, data_collection_name)  # Load retriever from existing Qdrant collection
 
     question = input("Enter your question: ")  # Prompt user for a question
 
 
-    context_text = context_texts(question, client, retriever) # 
+    context_text = context_texts(question, client, retriever)  
 
 
 
     system_prompt_answer = generate_prompt(context_text)  # Generate prompt using context chunks
-    # print(f"System prompt :{system_prompt_answer}")
+    print(f"System prompt :{system_prompt_answer}")
     response = answer_question(client, system_prompt_answer, question)  # Get AI-generated answer
 
     print_colored_answer(response)   # Output the answer to the console
